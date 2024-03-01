@@ -11,20 +11,56 @@ const WS_PORT = 8080;
 const tcpServer = net.createServer();
 const websocketServer = new WebSocketServer({ port: WS_PORT });
 
+let numExceedsRange: number = 0;
+let firstOutOfRange: number = 0;
+let outOfRange: number = 0;
+
+function checkTemp(jsonData: VehicleData) {
+  if (jsonData.battery_temperature < 20 || jsonData.battery_temperature > 80) {
+    outOfRange = jsonData.timestamp;
+    if (numExceedsRange === 0) {
+      firstOutOfRange = outOfRange;
+    }
+
+    if (outOfRange - firstOutOfRange > 5000) {
+      if (numExceedsRange > 3) {
+        console.log(
+          "Unsafe temperature detected! The temperature exceeds range from: " +
+            firstOutOfRange +
+            " to " +
+            outOfRange +
+            ", which Occurs " +
+            numExceedsRange +
+            " times."
+        );
+      }
+      numExceedsRange = 1;
+      firstOutOfRange = outOfRange;
+    } else {
+      numExceedsRange++;
+    }
+  }
+}
+
 tcpServer.on("connection", (socket) => {
   console.log("TCP client connected");
 
   socket.on("data", (msg) => {
     console.log(`Received: ${msg.toString()}`);
 
-    const jsonData: VehicleData = JSON.parse(msg.toString());
-
-    // Send JSON over WS to frontend clients
-    websocketServer.clients.forEach(function each(client) {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(msg.toString());
-      }
-    });
+    try {
+      const jsonData: VehicleData = JSON.parse(msg.toString());
+      checkTemp(jsonData);
+    } catch (error) {
+      return console.error("Error! unexpected message formation");
+    } finally {
+      // Send JSON over WS to frontend clients
+      websocketServer.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(msg.toString());
+        }
+      });
+    }
   });
 
   socket.on("end", () => {
