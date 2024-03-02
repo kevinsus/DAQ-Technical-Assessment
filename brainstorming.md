@@ -30,7 +30,4 @@ Task 3:
 
 > I also add a battery logo by importing an image into the app.tsx .
 
-Task 4:
-
-
 ## Cloud

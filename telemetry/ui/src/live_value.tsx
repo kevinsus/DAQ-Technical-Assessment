@@ -9,12 +9,10 @@ function LiveValue({ temp }: TemperatureProps) {
 
   if (temp < 20 || temp > 80) {
     valueColour = 'red'
-  } else if (temp < 30 || temp > 70) {
-    valueColour = 'orange'
-  } else if (temp < 40 || temp > 60 ) {
+  } else if (temp <= 25 || temp >= 75) {
     valueColour = 'yellow'
   } else {
-    valueColour = 'white'
+    valueColour = 'green'
   }
 
   return (
