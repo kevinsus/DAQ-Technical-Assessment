@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import LiveValue from "./live_value";
 import RedbackLogo from "./redback_logo.jpg";
+import Battery from "./assets/battery.png"
 import "./App.css";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
@@ -52,6 +53,7 @@ function App() {
           alt="Redback Racing Logo"
         />
         <p className="value-title">Live Battery Temperature</p>
+        <img src={Battery} alt="Battery logo" style={{ width: "10rem" }} />
         <LiveValue temp={temperature} />
       </header>
     </div>

@@ -53,14 +53,13 @@ tcpServer.on("connection", (socket) => {
       checkTemp(jsonData);
     } catch (error) {
       return console.error("Error! unexpected message formation");
-    } finally {
-      // Send JSON over WS to frontend clients
-      websocketServer.clients.forEach(function each(client) {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(msg.toString());
-        }
-      });
     }
+    // Send JSON over WS to frontend clients
+    websocketServer.clients.forEach(function each(client) {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(msg.toString());
+      }
+    });
   });
 
   socket.on("end", () => {

@@ -22,4 +22,15 @@ I created another function where it will:
 
 (Note that the above is a pseudocode.)
 
+Task 3:
+
+> The source code for changing the font colour is inside live_value.tsx . Hence, its simply adding an if statements to change the colour of the text.
+
+> To make less black spacing, I add a white background by changing the css properties of index.css, then change the width of app-header class as well as make the content centre.
+
+> I also add a battery logo by importing an image into the app.tsx .
+
+Task 4:
+
+
 ## Cloud
